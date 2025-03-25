@@ -17,8 +17,8 @@ export default function TaskList({ tasks, onToggle }: Props) {
           className={`flex items-center gap-2 p-3 rounded border 
             ${
               completed
-                ? "bg-gray-100 text-gray-500 line-through opacity-60"
-                : "bg-white hover:bg-blue-50"
+                ? "bg-gray-100 text-gray-500 line-through opacity-60 dark:bg-gray-700"
+                : "bg-white hover:bg-blue-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white"
             }`}
         >
           <input
@@ -36,7 +36,7 @@ export default function TaskList({ tasks, onToggle }: Props) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* 未完了タスク */}
-      <section className="bg-white p-4 rounded shadow border">
+      <section className="bg-white dark:bg-gray-800 p-4 rounded shadow border dark:border-gray-600">
         <h2 className="text-lg font-semibold mb-4">📝 未完了タスク</h2>
         {incompleteTasks.length === 0 ? (
           <p className="text-gray-400">まだありません。</p>
@@ -46,7 +46,7 @@ export default function TaskList({ tasks, onToggle }: Props) {
       </section>
 
       {/* 完了タスク */}
-      <section className="bg-white p-4 rounded shadow border">
+      <section className="bg-white dark:bg-gray-800 p-4 rounded shadow border dark:border-gray-600">
         <h2 className="text-lg font-semibold mb-4">✅ 完了済みタスク</h2>
         {completedTasks.length === 0 ? (
           <p className="text-gray-400">まだ完了していません。</p>
