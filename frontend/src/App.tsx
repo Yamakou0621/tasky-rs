@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import { getTasks, createTask } from "./api/tasks";
+import { Task } from "./types";
+import TaskForm from "./components/TaskForm";
+import TaskList from "./components/TaskList";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  useEffect(() => {
+    getTasks()
+      .then(setTasks)
+      .catch((err) => console.error("タスク取得失敗:", err));
+  }, []);
+
+  const handleAddTask = async (description: string) => {
+    if (!description.trim()) return;
+    try {
+      const created = await createTask(description);
+      setTasks((prev) => [...prev, created]);
+    } catch (err) {
+      console.error("タスク追加失敗:", err);
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div style={{ padding: "1rem" }}>
+      <h1>タスクリスト</h1>
+      <TaskForm onAdd={handleAddTask} />
+      <TaskList tasks={tasks} />
+    </div>
+  );
 }
 
-export default App
+export default App;
