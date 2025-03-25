@@ -17,10 +17,3 @@ export async function createTask(description: string): Promise<Task> {
   });
   return await res.json();
 }
-
-export async function toggleTaskCompleted(id: number): Promise<Task> {
-  const res = await fetch(`${API_BASE}/tasks/${id}`, {
-    method: "PATCH",
-  });
-  return await res.json();
-}
