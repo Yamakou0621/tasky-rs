@@ -1,12 +1,10 @@
-use axum::{
-    Json, Router,
-    extract::State,
-    routing::{get, post},
-};
+use axum::{Json, Router, extract::State, routing::get};
+use http::{HeaderName, Method};
 use std::{
     net::SocketAddr,
     sync::{Arc, Mutex},
 };
+use tower_http::cors::{Any, CorsLayer};
 
 mod model;
 use model::{CreateTask, Task};
@@ -21,7 +19,13 @@ async fn main() {
     // ルーティング定義
     let app = Router::new()
         .route("/tasks", get(get_tasks).post(create_task))
-        .with_state(tasks.clone());
+        .with_state(tasks.clone())
+        .layer(
+            CorsLayer::new()
+                .allow_origin(Any)
+                .allow_methods([Method::GET, Method::POST])
+                .allow_headers([HeaderName::from_static("content-type")]),
+        );
 
     // サーバー起動
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
