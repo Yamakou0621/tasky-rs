@@ -1,5 +1,9 @@
-use axum::{Json, Router, extract::State, routing::get};
-use http::{HeaderName, Method};
+use axum::{
+    Json, Router,
+    extract::{Path, State},
+    routing::{get, patch},
+};
+use http::{HeaderName, Method, StatusCode};
 use std::{
     net::SocketAddr,
     sync::{Arc, Mutex},
@@ -19,11 +23,12 @@ async fn main() {
     // ルーティング定義
     let app = Router::new()
         .route("/tasks", get(get_tasks).post(create_task))
+        .route("/tasks/:id", patch(toggle_task_completed))
         .with_state(tasks.clone())
         .layer(
             CorsLayer::new()
                 .allow_origin(Any)
-                .allow_methods([Method::GET, Method::POST])
+                .allow_methods([Method::GET, Method::POST, Method::PATCH])
                 .allow_headers([HeaderName::from_static("content-type")]),
         );
 
@@ -57,4 +62,18 @@ async fn create_task(
 
     tasks.push(new_task.clone());
     Json(new_task)
+}
+
+async fn toggle_task_completed(
+    Path(id): Path<usize>,
+    State(tasks): State<SharedTasks>,
+) -> Result<Json<Task>, StatusCode> {
+    let mut tasks = tasks.lock().unwrap();
+
+    if let Some(task) = tasks.iter_mut().find(|t| t.id == id) {
+        task.completed = !task.completed;
+        Ok(Json(task.clone()))
+    } else {
+        Err(StatusCode::NOT_FOUND)
+    }
 }
