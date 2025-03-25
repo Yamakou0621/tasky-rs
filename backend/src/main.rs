@@ -1,9 +1,8 @@
 use axum::{
-    Json, Router,
-    extract::{Path, State},
+    Router,
     routing::{get, patch},
 };
-use http::{HeaderName, Method, StatusCode};
+use http::{HeaderName, Method};
 use std::{
     net::SocketAddr,
     sync::{Arc, Mutex},
@@ -11,14 +10,17 @@ use std::{
 use tower_http::cors::{Any, CorsLayer};
 
 mod model;
-use model::{CreateTask, Task};
+use model::load_tasks;
 
-type SharedTasks = Arc<Mutex<Vec<Task>>>;
+mod routes;
+use routes::{create_task, get_tasks, toggle_task_completed};
 
 #[tokio::main]
 async fn main() {
-    // 初期状態のタスクリスト（空）
-    let tasks: SharedTasks = Arc::new(Mutex::new(vec![]));
+    let tasks_file = "tasks.json";
+
+    let initial_tasks = load_tasks(tasks_file).unwrap_or_default();
+    let tasks = Arc::new(Mutex::new(initial_tasks));
 
     // ルーティング定義
     let app = Router::new()
@@ -38,42 +40,4 @@ async fn main() {
     axum::serve(tokio::net::TcpListener::bind(addr).await.unwrap(), app)
         .await
         .unwrap();
-}
-
-// GET /tasks - タスク一覧を取得
-async fn get_tasks(State(tasks): State<SharedTasks>) -> Json<Vec<Task>> {
-    let tasks = tasks.lock().unwrap();
-    Json(tasks.clone())
-}
-
-// POST /tasks - 新しいタスクを追加
-async fn create_task(
-    State(tasks): State<SharedTasks>,
-    Json(payload): Json<CreateTask>,
-) -> Json<Task> {
-    let mut tasks = tasks.lock().unwrap();
-    let new_id = tasks.len() + 1;
-
-    let new_task = Task {
-        id: new_id,
-        description: payload.description,
-        completed: false,
-    };
-
-    tasks.push(new_task.clone());
-    Json(new_task)
-}
-
-async fn toggle_task_completed(
-    Path(id): Path<usize>,
-    State(tasks): State<SharedTasks>,
-) -> Result<Json<Task>, StatusCode> {
-    let mut tasks = tasks.lock().unwrap();
-
-    if let Some(task) = tasks.iter_mut().find(|t| t.id == id) {
-        task.completed = !task.completed;
-        Ok(Json(task.clone()))
-    } else {
-        Err(StatusCode::NOT_FOUND)
-    }
 }

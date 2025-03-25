@@ -1,5 +1,6 @@
 # Rust
 backend/target
+backend/tasks.json
 
 # Node.js
 frontend/node_modules
