@@ -1,11 +1,8 @@
 # Rust
-/target
-**/*.rs.bk
+backend/target
 
 # Node.js
-node_modules/
-dist/
-.env
+frontend/node_modules
 
 # macOS
 .DS_Store
