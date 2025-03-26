@@ -1,0 +1,20 @@
+{
+  "restoreTerminals.runOnStartup": true,
+  "restoreTerminals.terminals": [
+    {
+      "splitTerminals": [
+        {
+          "name": "backend",
+          "commands": ["cd backend", "cargo run"]
+        },
+        {
+          "name": "frontend",
+          "commands": ["cd frontend", "npm run dev"]
+        },
+        {
+          "name": "free"
+        }
+      ]
+    }
+  ]
+}
