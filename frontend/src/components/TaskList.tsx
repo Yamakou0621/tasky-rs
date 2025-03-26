@@ -1,13 +1,13 @@
-import { Task } from "../types";
+import { Task } from '../types'
 
 type Props = {
-  tasks: Task[];
-  onToggle: (id: number) => void;
-};
+  tasks: Task[]
+  onToggle: (id: number) => void
+}
 
 export default function TaskList({ tasks, onToggle }: Props) {
-  const incompleteTasks = tasks.filter((t) => !t.completed);
-  const completedTasks = tasks.filter((t) => t.completed);
+  const incompleteTasks = tasks.filter((t) => !t.completed)
+  const completedTasks = tasks.filter((t) => t.completed)
 
   const renderTasks = (list: Task[], completed: boolean) => (
     <ul className="space-y-2">
@@ -17,8 +17,8 @@ export default function TaskList({ tasks, onToggle }: Props) {
           className={`flex items-center gap-2 p-3 rounded border 
             ${
               completed
-                ? "bg-gray-100 text-gray-500 line-through opacity-60 dark:bg-gray-700"
-                : "bg-white hover:bg-blue-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white"
+                ? 'bg-gray-100 text-gray-500 line-through opacity-60 dark:bg-gray-700'
+                : 'bg-white hover:bg-blue-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white'
             }`}
         >
           <input
@@ -31,7 +31,7 @@ export default function TaskList({ tasks, onToggle }: Props) {
         </li>
       ))}
     </ul>
-  );
+  )
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -55,5 +55,5 @@ export default function TaskList({ tasks, onToggle }: Props) {
         )}
       </section>
     </div>
-  );
+  )
 }

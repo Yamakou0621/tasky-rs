@@ -1,12 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./index.html", //ViteのHTMLエントリ
-    "./src/**/*.{js,ts,jsx,tsx}",
+    './index.html', //ViteのHTMLエントリ
+    './src/**/*.{js,ts,jsx,tsx}',
   ],
-  darkMode: "class",
+  darkMode: 'class',
   theme: {
     extend: {},
   },
   plugins: [],
-};
+}

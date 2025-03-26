@@ -1,17 +1,17 @@
-import { useState } from "react";
+import { useState } from 'react'
 
 type Props = {
-  onAdd: (description: string) => void;
-};
+  onAdd: (description: string) => void
+}
 export default function TaskForm({ onAdd }: Props) {
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('')
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim()) return;
-    onAdd(input);
-    setInput("");
-  };
+    e.preventDefault()
+    if (!input.trim()) return
+    onAdd(input)
+    setInput('')
+  }
 
   return (
     <form onSubmit={handleSubmit} className="flex gap-2 mb-6">
@@ -32,5 +32,5 @@ export default function TaskForm({ onAdd }: Props) {
         追加
       </button>
     </form>
-  );
+  )
 }
