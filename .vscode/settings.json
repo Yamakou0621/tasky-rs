@@ -1,0 +1,16 @@
+{
+  "restoreTerminals.runOnStartup": true,
+  "restoreTerminals.terminals": [
+    {
+      "splitTerminals": [
+        {
+          "name": "turbo",
+          "commands": ["npm run dev"]
+        },
+        {
+          "name": "free"
+        }
+      ]
+    }
+  ]
+}
