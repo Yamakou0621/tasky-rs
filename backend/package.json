@@ -1,0 +1,10 @@
+{
+  "name": "backend",
+  "scripts": {
+    "dev": "cargo run",
+    "build": "cargo build --release",
+    "check": "cargo check",
+    "lint": "cargo clippy",
+    "format": "cargo fmt --all"
+  }
+}
